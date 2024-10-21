@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "monte-carlo-tree-search"
+version = "0.1.0"
+description = ""
+authors = ["Walker Hughes <74113220+walkerhughes@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11.09"
+numpy = "^2.1.2"
+openai = "^1.52.0"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
