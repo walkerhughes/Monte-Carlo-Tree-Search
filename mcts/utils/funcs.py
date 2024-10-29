@@ -1,7 +1,10 @@
+import re
 from openai import OpenAI
+from settings.constants import OPENAI_MODEL
 
 
-def chat_completion_request_openai(client: OpenAI, model: str = "", prompt: str = ""):
+
+def chat_completion_request_openai(client: OpenAI, model: str = OPENAI_MODEL, prompt: str = ""):
     messages = [
         {"role": "user", "content": prompt}
     ]
@@ -16,7 +19,7 @@ def chat_completion_request_openai(client: OpenAI, model: str = "", prompt: str 
     return None
 
 
-def get_draft_answer_critique(question, draft_answer):
+def get_draft_answer_critique(client: OpenAI, model: str = OPENAI_MODEL, question = "", draft_answer = ""):
     prompt = (
         f"Question: {question}"
         f"Draft Answer: {draft_answer}"
@@ -28,10 +31,10 @@ def get_draft_answer_critique(question, draft_answer):
         "DO: Think step by step."
         "DO NOT provide a revised answer"
     )
-    return chat_completion_request_openai(prompt)
+    return chat_completion_request_openai(client, prompt)
 
 
-def get_improved_answer(question, draft_answer, critique):
+def get_improved_answer(client: OpenAI, model: str = OPENAI_MODEL, question="", draft_answer="", critique=""):
     prompt = (
         f"Question: {question}"
         f"Draft Answer: {draft_answer}"
@@ -41,9 +44,9 @@ def get_improved_answer(question, draft_answer, critique):
         "Verification: <verification of the facts>\n"
         "Final Answer: <the improved and verified answer>\n"
     )
-    return chat_completion_request_openai(prompt)
+    return chat_completion_request_openai(client, prompt)
 
-def rate_answer(question, answer):
+def get_answer_rating(client: OpenAI, question, answer):
     prompt = (
         f"Question: {question}"
         f"Answer: {answer}"
@@ -54,7 +57,7 @@ def rate_answer(question, answer):
         "Critique: <detailed critique>\n"
         "Rating: <0 to 100 rating>\n"
     )
-    response = chat_completion_request_openai(prompt)
+    response = chat_completion_request_openai(client, prompt)
     try: 
         match = re.search(r"Rating:\s+(\d+)", response)
         if match:
